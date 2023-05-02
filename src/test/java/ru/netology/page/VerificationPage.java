@@ -24,22 +24,9 @@ public class VerificationPage {
         clearInput();
         codeInput.setValue(getVerifyCode());
         button.click();
-        new DashboardPage();
+        return new DashboardPage();
     }
 
-    public void invalidCode() {
-        clearInput();
-        codeInput.setValue(getInvalidCode());
-        button.click();
-        errorNotification.shouldBe(visible).shouldHave(text("Ошибка"));
-    }
-
-    public void emptyCode() {
-        clearInput();
-        codeInput.setValue("");
-        button.click();
-        errorEmptyCode.shouldBe(visible).shouldHave(text("Поле обязательно для заполнения"));
-    }
 
     private void clearInput() {
         codeInput.sendKeys(Keys.CONTROL + "A");

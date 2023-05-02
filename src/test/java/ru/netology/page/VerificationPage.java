@@ -10,23 +10,18 @@ import static ru.netology.data.SQLHelper.getVerifyCode;
 import static ru.netology.data.DataHelper.getInvalidCode;
 
 public class VerificationPage {
-    SelenideElement codeInput = $("[data-test-id='code'] input");
-    SelenideElement errorNotification = $("[data-test-id='error-notification'] .notification__content");
-    SelenideElement errorEmptyCode = $("[data-test-id='code'] .input__sub");
-    SelenideElement button = $("[data-test-id='action-verify']");
-    SelenideElement header = $(".paragraph");
+    private SelenideElement codeField = $("[data-test-id=code] input");
+    private SelenideElement verifyButton = $("[data-test-id=action-verify]");
 
-    public void accessPage() {
-        header.shouldBe(visible).shouldHave(text("Необходимо подтверждение"));
+    public VerificationPage() {
+        codeField.shouldBe(visible);
     }
 
-    public void validCode() {
-        clearInput();
-        codeInput.setValue(getVerifyCode());
-        button.click();
+    public DashboardPage validVerify(String code) {
+        codeField.setValue(code);
+        verifyButton.click();
         return new DashboardPage();
     }
-
 
     private void clearInput() {
         codeInput.sendKeys(Keys.CONTROL + "A");

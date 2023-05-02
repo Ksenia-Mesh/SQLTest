@@ -10,17 +10,36 @@ import static ru.netology.data.SQLHelper.getVerifyCode;
 import static ru.netology.data.DataHelper.getInvalidCode;
 
 public class VerificationPage {
-    private SelenideElement codeField = $("[data-test-id=code] input");
-    private SelenideElement verifyButton = $("[data-test-id=action-verify]");
 
-    public VerificationPage() {
-        codeField.shouldBe(visible);
+    SelenideElement codeInput = $("[data-test-id='code'] input");
+    SelenideElement errorNotification = $("[data-test-id='error-notification'] .notification__content");
+    SelenideElement errorEmptyCode = $("[data-test-id='code'] .input__sub");
+    SelenideElement button = $("[data-test-id='action-verify']");
+    SelenideElement header = $(".paragraph");
+
+    public void accessPage() {
+        header.shouldBe(visible).shouldHave(text("Необходимо подтверждение"));
     }
 
-    public DashboardPage validVerify(String code) {
-        codeField.setValue(code);
-        verifyButton.click();
+    public DashboardPage validVerify() {
+        clearInput();
+        codeInput.setValue(getVerifyCode());
+        button.click();
         return new DashboardPage();
+    }
+
+    public void invalidCode() {
+        clearInput();
+        codeInput.setValue(getInvalidCode());
+        button.click();
+        errorNotification.shouldBe(visible).shouldHave(text("Ошибка"));
+    }
+
+    public void emptyCode() {
+        clearInput();
+        codeInput.setValue("");
+        button.click();
+        errorEmptyCode.shouldBe(visible).shouldHave(text("Поле обязательно для заполнения"));
     }
 
     private void clearInput() {

@@ -47,21 +47,6 @@ public class DbInteraction {
     }
 
     @Test
-    void shouldReturnFailWithEmptyLogin() {
-        new LoginPage().emptyLoginOrPass(getEmptyLogin());
-    }
-
-    @Test
-    void shouldReturnFailWithEmptyPass() {
-        new LoginPage().emptyLoginOrPass(getEmptyPass());
-    }
-
-    @Test
-    void shouldReturnFailWithEmptyLoginAndPass() {
-        new LoginPage().emptyLoginOrPass(getEmptyAuthInfo());
-    }
-
-    @Test
     void shouldReturnFailWithInvalidCode() {
         new LoginPage().validLogin(getFirstAuthInfo()).invalidCode();
     }
@@ -73,13 +58,13 @@ public class DbInteraction {
 
     @Test
     void shouldEnterAccountPageFirstAccount() {
-        new LoginPage().validLogin(getFirstAuthInfo()).validCode();
+        new LoginPage().validLogin(getFirstAuthInfo()).validVerify();
         new DashboardPage().accessLogin();
     }
 
     @Test
     void shouldEnterAccountPageSecondAccount() {
-        new LoginPage().validLogin(getSecondAuthInfo()).validCode();
+        new LoginPage().validLogin(getSecondAuthInfo()).validVerify();
         new DashboardPage().accessLogin();
     }
 

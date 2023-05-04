@@ -1,8 +1,5 @@
 package ru.netology.data;
 
-import com.github.javafaker.Faker;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
@@ -15,7 +12,7 @@ public class SQLHelper {
     private final static QueryRunner queryRunner = new QueryRunner();
     private final static Connection conn = connection();
     private static final String url = "jdbc:mysql://localhost:3306/database";
-    private static final String user = "user";
+    private static final String user = "app";
     private static final String password = "pass";
     static String code;
 

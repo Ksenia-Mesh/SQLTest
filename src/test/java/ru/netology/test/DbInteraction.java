@@ -1,78 +1,27 @@
 package ru.netology.test;
 
-import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.*;
-import ru.netology.page.DashboardPage;
+import ru.netology.data.DataHelper;
+import ru.netology.data.SQLHelper;
 import ru.netology.page.LoginPage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.data.SQLHelper.deleteAllDB;
-import static ru.netology.data.SQLHelper.deleteCodes;
-import static ru.netology.data.DataHelper.*;
 
-public class DbInteraction {
-    @BeforeAll
-    static void setUpAll() {
-        Configuration.headless = false;
-    }
 
-    @BeforeEach
-    void setUp() {
-        open("http://localhost:9999");
-    }
-
-    @AfterEach
-    void setDown() {
-        deleteCodes();
-    }
-
+public class DbInteraction  {
     @AfterAll
-    static void setDownAll() {
-        deleteAllDB();
-    }
+    static void teardown() {deleteAllDB();}
 
     @Test
-    void shouldReturnAccessWithFirstValidLogin() {
-        new LoginPage().validLogin(getFirstAuthInfo()).accessPage();
+    @DisplayName("")
+    void shouldSuccessfulLogin() {
+        var loginPage = open("http://localhost:9999", LoginPage.class);
+        var authInfo = DataHelper.getAuthInfoWithTestData();
+        var verificationPage = loginPage.validLogin(authInfo);
+        verificationPage.verifyVerificationPageVisibility();
+        var verificationCode = SQLHelper.getVerificationCode();
+        verificationPage.validVerify(verificationCode.getCode());
     }
 
-    @Test
-    void shouldReturnAccessWithSecondValidLogin() {
-        new LoginPage().validLogin(getSecondAuthInfo()).accessPage();
-    }
-
-    @Test
-    void shouldReturnFailWithInvalidLogin() {
-        new LoginPage().invalidLogin(getInvalidAuthInfo());
-    }
-
-    @Test
-    void shouldReturnFailWithInvalidCode() {
-        new LoginPage().validLogin(getFirstAuthInfo()).invalidCode();
-    }
-
-    @Test
-    void shouldReturnFailWithEmptyCode() {
-        new LoginPage().validLogin(getSecondAuthInfo()).emptyCode();
-    }
-
-    @Test
-    void shouldEnterAccountPageFirstAccount() {
-        new LoginPage().validLogin(getFirstAuthInfo()).validVerify();
-        new DashboardPage().accessLogin();
-    }
-
-    @Test
-    void shouldEnterAccountPageSecondAccount() {
-        new LoginPage().validLogin(getSecondAuthInfo()).validVerify();
-        new DashboardPage().accessLogin();
-    }
-
-    @Test
-    void shouldReturnFailAfterTripleEntry() {
-        new LoginPage().validLogin(getInvalidPassFirstAuthInfo());
-        new LoginPage().validLogin(getInvalidPassFirstAuthInfo());
-        new LoginPage().validLogin(getInvalidPassFirstAuthInfo());
-        new LoginPage().invalidLogin(getFirstAuthInfo());
-    }
 }

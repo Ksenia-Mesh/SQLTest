@@ -3,48 +3,54 @@ package ru.netology.data;
 import com.github.javafaker.Faker;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Value;
+
+import java.util.Locale;
 
 public class DataHelper {
+    private static Faker faker = new Faker(new Locale("en"));
 
-    private static final Faker faker = new Faker();
+    private DataHelper(){
 
-    @Data
-    @AllArgsConstructor
+    }
+
+    public static AuthInfo getAuthInfoWithTestData() {
+        return new AuthInfo("vasya", "qwerty123");
+    }
+    private static String generateRandomeLogin() {
+        return faker.name().username();
+    }
+
+    private static String generateRandomPassword() {
+        return faker.internet().password();
+    }
+
+    private static AuthInfo generateRandomUser() {
+        return new AuthInfo(generateRandomeLogin(), generateRandomPassword());
+    }
+    public static VerificationCode generateRandomVerificationCode() {
+        return new VerificationCode(faker.numerify("######"));
+    }
+
+    @Value
     public static class AuthInfo {
         String login;
         String password;
     }
 
-    public static AuthInfo getFirstAuthInfo() {
-        return new AuthInfo("vasya", "qwerty123");
+    @Value
+    public static class VerificationCode {
+        String code;
     }
 
-    public static AuthInfo getSecondAuthInfo() {
-        return new AuthInfo("petya", "123qwerty");
-    }
-
-    public static AuthInfo getInvalidAuthInfo() {
-        return new AuthInfo(faker.name().username(), faker.internet().password());
-    }
-
-    public static AuthInfo getInvalidPassFirstAuthInfo() {
-        return new AuthInfo("vasya", faker.internet().password());
-    }
-
-    public static AuthInfo getEmptyAuthInfo() {
-        return new AuthInfo("", "");
-    }
-
-    public static AuthInfo getEmptyLogin() {
-        return new AuthInfo("", faker.internet().password());
-    }
-
-    public static AuthInfo getEmptyPass() {
-        return new AuthInfo(faker.name().username(), "");
-    }
-
-    public static String getInvalidCode() {
-        return faker.code().gtin13();
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AuthCode {
+        private String id;
+        private String user_id;
+        private String code;
+        private String created;
     }
 }
-

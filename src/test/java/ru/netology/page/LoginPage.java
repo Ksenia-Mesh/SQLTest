@@ -1,39 +1,33 @@
 package ru.netology.page;
 
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.support.FindBy;
 import ru.netology.data.DataHelper;
-import org.openqa.selenium.Keys;
-
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
 
-    SelenideElement login = $("[data-test-id='login'] input");
-    SelenideElement pass = $("[data-test-id='password'] input");
-    SelenideElement errorNotification = $("[data-test-id='error-notification'] .notification__content");
-    SelenideElement button = $("[data-test-id='action-login']");
+    @FindBy(css="[data-test-id='login'] input")
+    private SelenideElement loginField;
 
-    public VerificationPage validLogin(DataHelper.AuthInfo info) {
-        clearInput();
-        login.setValue(info.getLogin());
-        pass.setValue(info.getPassword());
-        button.click();
-        return new VerificationPage();
-    }
+    @FindBy(css="[data-test-id='password'] input")
+    private SelenideElement passwordField;
 
-    public void invalidLogin(DataHelper.AuthInfo info) {
-        clearInput();
-        login.setValue(info.getLogin());
-        pass.setValue(info.getPassword());
-        button.click();
+    @FindBy(css="[data-test-id='action-login']")
+    private SelenideElement loginButton;
+
+    @FindBy(css="[data-test-id='error-notification']")
+    private SelenideElement errorNotification;
+
+    public void verifyErrorNotificationVisibility(){
         errorNotification.shouldBe(visible);
     }
-    private void clearInput() {
-        login.sendKeys(Keys.CONTROL + "A");
-        login.sendKeys(Keys.DELETE);
-        pass.sendKeys(Keys.CONTROL + "A");
-        pass.sendKeys(Keys.DELETE);
+
+    public VerificationPage validLogin(DataHelper.AuthInfo info) {
+        loginField.setValue(info.getLogin());
+        passwordField.setValue(info.getPassword());
+        loginButton.click();
+        return page(VerificationPage.class);
     }
 }

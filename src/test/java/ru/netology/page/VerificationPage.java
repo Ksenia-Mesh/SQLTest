@@ -1,49 +1,32 @@
 package ru.netology.page;
 
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.Keys;
+import org.openqa.selenium.support.FindBy;
 
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static ru.netology.data.SQLHelper.getVerifyCode;
-import static ru.netology.data.DataHelper.getInvalidCode;
 
 public class VerificationPage {
 
-    SelenideElement codeInput = $("[data-test-id='code'] input");
-    SelenideElement errorNotification = $("[data-test-id='error-notification'] .notification__content");
-    SelenideElement errorEmptyCode = $("[data-test-id='code'] .input__sub");
-    SelenideElement button = $("[data-test-id='action-verify']");
-    SelenideElement header = $(".paragraph");
+    @FindBy(css="[data-test-id='code'] input")
+    private SelenideElement codeField;
 
-    public void accessPage() {
-        header.shouldBe(visible).shouldHave(text("Необходимо подтверждение"));
+    @FindBy(css="[data-test-id='action-verify']")
+    private SelenideElement verification;
+
+    @FindBy(css="[data-test-id='error-notification']")
+    private SelenideElement errorNotification;
+
+    public void verifyVerificationPageVisibility() {codeField.shouldBe(visible); }
+
+    public void verifyErrorNotificationVisibility() {errorNotification.shouldBe(visible); }
+
+    public DashboardPage validVerify(String verificationCode) {
+        verify(verificationCode);
+        return page(DashboardPage.class);
     }
 
-    public DashboardPage validVerify() {
-        clearInput();
-        codeInput.setValue(getVerifyCode());
-        button.click();
-        return new DashboardPage();
-    }
-
-    public void invalidCode() {
-        clearInput();
-        codeInput.setValue(getInvalidCode());
-        button.click();
-        errorNotification.shouldBe(visible).shouldHave(text("Ошибка"));
-    }
-
-    public void emptyCode() {
-        clearInput();
-        codeInput.setValue("");
-        button.click();
-        errorEmptyCode.shouldBe(visible).shouldHave(text("Поле обязательно для заполнения"));
-    }
-
-    private void clearInput() {
-        codeInput.sendKeys(Keys.CONTROL + "A");
-        codeInput.sendKeys(Keys.DELETE);
+    public void verify(String verificationCode) {
+        codeField.setValue(verificationCode);
+        verifyButton.click();
     }
 }

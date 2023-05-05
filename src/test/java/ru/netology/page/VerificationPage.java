@@ -12,10 +12,12 @@ public class VerificationPage {
     private SelenideElement codeField;
 
     @FindBy(css="[data-test-id='action-verify']")
-    private SelenideElement verification;
+    private SelenideElement verifyButton;
 
     @FindBy(css="[data-test-id='error-notification']")
     private SelenideElement errorNotification;
+
+
 
     public void verifyVerificationPageVisibility() {codeField.shouldBe(visible); }
 

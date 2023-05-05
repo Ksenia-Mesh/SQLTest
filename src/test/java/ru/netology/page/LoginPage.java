@@ -5,6 +5,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.netology.data.DataHelper;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.page;
 
 public class LoginPage {
 
